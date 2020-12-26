@@ -1,62 +1,11 @@
 let goalAmount = 0;
 let bgColor = null;
 let txtColor = null;
-
-const cors_api_url = 'https://56ee5b24e3f3.ngrok.io';
-async function doCORSRequest(options, printResult) {
-  return new Promise((resolve, reject) => {
-    var x = new XMLHttpRequest();
-    x.open(options.method, cors_api_url + options.url);
-
-    x.onload = function() {
-      printResult({
-        method: options.method,
-        url:  options.url,
-        status: x.status,
-        statusText: x.statusText,
-        responseText: (x.responseText || '')
-      });
-      resolve();
-    };
-
-    x.onerror = function (error) {
-        reject(error);
-    }
-
-    if (/^POST/i.test(options.method)) {
-      x.setRequestHeader('Content-Type', 'application/json');
-    }
-
-    x.send(options.data);
-  })
-}
-
-
-const a = async () => {
-  const b = await fetch('https://4c35a43dd798.ngrok.io/api/getgoalamount', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      "shopId": `${window.location.host}`,
-    }),
-  });
-
-  const temp = await b.json();
-  console.log(temp);
-  return temp;
-}
-
-async function setShopGoal(obj) {
-  //goalAmount = obj.responseText;
-  // const ab = await obj.json();
-  // console.log(ab);
-  const temp = await a();
-  console.log(temp);
-  goalAmount = "100"
-};
+let initialMsgBefore = null;
+let initialMsgAfter = null;
+let progressMsgBefore = null;
+let progressMsgAfter = null;
+let goalAchievedMsg = null;
 
 function valWithDecimal(val) {
   const valStr = val.toString();
@@ -68,12 +17,12 @@ function getBarMessage(goalAmount, cartAmount) {
   cartAmount = parseFloat(cartAmount);
 
   if(cartAmount === 0) {
-    return `Buy $${goalAmount} to get free shipping!`;
+    return `${initialMsgBefore} $${goalAmount} ${initialMsgAfter}`;
   }
   else if(goalAmount > cartAmount) {
-    return `Only $${goalAmount-cartAmount} away from free shipping`;
+    return `${progressMsgBefore} $${goalAmount-cartAmount} ${progressMsgAfter}`;
   } else if(goalAmount <= cartAmount) {
-    return `Congratulations! You have got free shipping`;
+    return `${goalAchievedMsg}`;
   }
 }
 
@@ -117,8 +66,8 @@ function setupFreeShippingBar(message) {
       "width": "100%",
       "box-sizing": "border-box",
       "border": "medium none",
-      "background-color": "rgb(30, 30, 32)",
-      "color": "rgb(242, 202, 128)",
+      "background-color": `${bgColor}`,
+      "color": `${txtColor}`,
       "font-size": "16px",
       "line-height": "20px",
       "font-family": "Helvetica",
@@ -138,17 +87,32 @@ async function getTotalCartValue() {
    }
 }
 
-doCORSRequest({
-  method: "post",
-  url: "/api/getgoalamount",
-  data: JSON.stringify({
-    "shopId": `${window.location.host}`,
-  })
-}, setShopGoal).then(() => {
-  getTotalCartValue().then(currCartAmount => {
-    updateFreeShippingBar(goalAmount, currCartAmount);
+const init = async () => {
+  const dataBody = await fetch('https://fsb.vanilla-apps.com/api/getgoalamount', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "shopId": `${window.location.host}`,
+    }),
   });
-});
+
+  const data = await dataBody.json();
+  goalAmount = data.goalAmount;
+
+  const { messages, styles } = data;
+
+  initialMsgBefore = messages.initialMsgBefore;
+  initialMsgAfter = messages.initialMsgAfter;
+  progressMsgBefore = messages.progressMsgBefore;
+  progressMsgAfter = messages.progressMsgAfter;
+  bgColor = styles.bgColor;
+  txtColor = styles.txtColor;
+
+  const totalCartAmount = await getTotalCartValue();
+  updateFreeShippingBar(goalAmount, totalCartAmount);
+}
 
 const open = window.XMLHttpRequest.prototype.open;
 
@@ -175,3 +139,5 @@ async function calculateShipping(cartJson) {
    const currCartAmount = await getTotalCartValue();
    updateFreeShippingBar(goalAmount, currCartAmount);
 }
+
+init();
