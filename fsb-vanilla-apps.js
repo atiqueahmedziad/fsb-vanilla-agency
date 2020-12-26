@@ -31,10 +31,30 @@ async function doCORSRequest(options, printResult) {
   })
 }
 
+
+const a = async () => {
+  const b = await fetch('https://4c35a43dd798.ngrok.io/api/getgoalamount', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "shopId": `${window.location.host}`,
+    }),
+  });
+
+  const temp = await b.json();
+  console.log(temp);
+  return temp;
+}
+
 async function setShopGoal(obj) {
   //goalAmount = obj.responseText;
-//   const ab = await obj.json();
-//   console.log(ab);
+  // const ab = await obj.json();
+  // console.log(ab);
+  const temp = await a();
+  console.log(temp);
   goalAmount = "100"
 };
 
@@ -128,27 +148,6 @@ doCORSRequest({
   getTotalCartValue().then(currCartAmount => {
     updateFreeShippingBar(goalAmount, currCartAmount);
   });
-});
-
-const a = async () => {
-  const b = await fetch('https://4c35a43dd798.ngrok.io/api/getgoalamount', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      "shopId": `${window.location.host}`,
-    }),
-  });
-
-  const temp = await b.json();
-  console.log(temp);
-  return temp;
-}
-
-(async () => {
-  await a();
 });
 
 const open = window.XMLHttpRequest.prototype.open;
