@@ -2,7 +2,7 @@ let goalAmount = 0;
 let bgColor = null;
 let txtColor = null;
 
-const cors_api_url = 'https://4c35a43dd798.ngrok.io';
+const cors_api_url = 'https://56ee5b24e3f3.ngrok.io';
 async function doCORSRequest(options, printResult) {
   return new Promise((resolve, reject) => {
     var x = new XMLHttpRequest();
