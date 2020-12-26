@@ -33,8 +33,8 @@ async function doCORSRequest(options, printResult) {
 
 async function setShopGoal(obj) {
   //goalAmount = obj.responseText;
-  const ab = await obj.json();
-  console.log(ab);
+//   const ab = await obj.json();
+//   console.log(ab);
   goalAmount = "100"
 };
 
