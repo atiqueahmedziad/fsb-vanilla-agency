@@ -18,6 +18,10 @@ function getBarMessage(goalAmount, cartAmount) {
   cartAmount = parseFloat(cartAmount);
   progressBarWidth = `${(goalAmount - cartAmount) / goalAmount * 100}`;
 
+  $('.fsb-progress-bar').css({
+    "width": `${progressBarWidth}%`,
+  });
+
   if(cartAmount === 0) {
     return `${initialMsgBefore} $${goalAmount} ${initialMsgAfter}`;
   } else if(goalAmount > cartAmount) {
@@ -79,7 +83,7 @@ function setupFreeShippingBar(message) {
     "margin": "0px",
     "padding": "0px",
     "left": "0px",
-    "width": `${progressBarWidth}px`,
+    "width": `${progressBarWidth}%`,
     "z-index": "1000000001",
     "position": "fixed",
     "border": "0",
