@@ -1,11 +1,12 @@
 let goalAmount = 0;
-let bgColor = null;
-let txtColor = null;
-let initialMsgBefore = null;
-let initialMsgAfter = null;
-let progressMsgBefore = null;
-let progressMsgAfter = null;
-let goalAchievedMsg = null;
+let bgColor = "";
+let txtColor = "";
+let initialMsgBefore = "";
+let initialMsgAfter = "";
+let progressMsgBefore = "";
+let progressMsgAfter = "";
+let goalAchievedMsg = "";
+let progressBarWidth = "0";
 
 function valWithDecimal(val) {
   const valStr = val.toString();
@@ -15,11 +16,11 @@ function valWithDecimal(val) {
 function getBarMessage(goalAmount, cartAmount) {
   goalAmount = parseFloat(goalAmount);
   cartAmount = parseFloat(cartAmount);
+  progressBarWidth = `${(goalAmount - cartAmount) / goalAmount * 100}`;
 
   if(cartAmount === 0) {
     return `${initialMsgBefore} $${goalAmount} ${initialMsgAfter}`;
-  }
-  else if(goalAmount > cartAmount) {
+  } else if(goalAmount > cartAmount) {
     return `${progressMsgBefore} $${goalAmount-cartAmount} ${progressMsgAfter}`;
   } else if(goalAmount <= cartAmount) {
     return `${goalAchievedMsg}`;
@@ -36,41 +37,54 @@ function updateFreeShippingBar(goalAmount, cartAmount) {
 }
 
 function setupFreeShippingBar(message) {
-   $('header').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div></div>`);
+   $('header').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div><div class="fsb-progress-bar"></div></div>`);
 
    $('.free-shipping-bar-container').css({
-      "display": 'block',
-      "color": 'inherit',
-      "height": '44px'
+    "display": 'block',
+    "color": 'inherit',
+    "height": '44px'
    });
 
    $('.free-shipping-bar').css({
-      "opacity": "1",
-      "margin": "0px",
-      "padding": "0px",
-      "left": "0px",
-      "height": "auto",
-      "width": "100%",
-      "z-index": "100000001",
-      "position": "fixed",
-      "top": "0px",
+    "opacity": "1",
+    "margin": "0px",
+    "padding": "0px",
+    "left": "0px",
+    "height": "auto",
+    "width": "100%",
+    "z-index": "100000001",
+    "position": "fixed",
+    "top": "0px",
    });
 
    $('.free-shipping-bar .text-container').css({
-      "text-align": "center",
-      "margin": "0px",
-      "margin-bottom": "0px",
-      "padding": "12px 10px",
-      "left": "0px",
-      "height": "auto",
-      "width": "100%",
-      "box-sizing": "border-box",
-      "border": "medium none",
-      "background-color": `${bgColor}`,
-      "color": `${txtColor}`,
-      "font-size": "16px",
-      "line-height": "20px",
-      "font-family": "Helvetica",
+    "text-align": "center",
+    "margin": "0px",
+    "margin-bottom": "0px",
+    "padding": "12px 10px",
+    "left": "0px",
+    "height": "auto",
+    "width": "100%",
+    "box-sizing": "border-box",
+    "border": "medium none",
+    "background-color": `${bgColor}`,
+    "color": `${txtColor}`,
+    "font-size": "16px",
+    "line-height": "20px",
+    "font-family": "Helvetica",
+   });
+
+   $('.fsb-progress-bar').css({
+    "opacity": "1",
+    "margin": "0px",
+    "padding": "0px",
+    "left": "0px",
+    "width": `${progressBarWidth}px`,
+    "z-index": "1000000001",
+    "position": "fixed",
+    "border": "0",
+    "height": "4px",
+    "background": "linear-gradient(90deg, rgba(30,69,171,1) 0%, rgba(81,18,135,1) 34%, rgba(142,19,96,1) 69%, rgba(144,7,18,1) 100%)",
    });
 
    $(".sticky").css("top", "44px");
