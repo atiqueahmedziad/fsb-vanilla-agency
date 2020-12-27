@@ -16,11 +16,6 @@ function valWithDecimal(val) {
 function getBarMessage(goalAmount, cartAmount) {
   goalAmount = parseFloat(goalAmount);
   cartAmount = parseFloat(cartAmount);
-  progressBarWidth = `${(goalAmount - cartAmount) / goalAmount * 100}`;
-
-  $('.fsb-progress-bar').css({
-    "width": `${progressBarWidth}%`,
-  });
 
   if(cartAmount === 0) {
     return `${initialMsgBefore} $${goalAmount} ${initialMsgAfter}`;
@@ -33,6 +28,12 @@ function getBarMessage(goalAmount, cartAmount) {
 
 function updateFreeShippingBar(goalAmount, cartAmount) {
   const barMessage = getBarMessage(goalAmount, cartAmount);
+  progressBarWidth = `${(goalAmount - cartAmount) / goalAmount * 100}`;
+
+  $('.fsb-progress-bar').css({
+    "width": `${progressBarWidth}%`,
+  });
+
   if($('.free-shipping-bar').length) {
     $('.free-shipping-bar .text-container').text(barMessage);
   } else {
@@ -41,7 +42,7 @@ function updateFreeShippingBar(goalAmount, cartAmount) {
 }
 
 function setupFreeShippingBar(message) {
-   $('header').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div><div class="fsb-progress-bar"></div></div>`);
+   $('header').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div></div><div class="fsb-progress-bar"></div>`);
 
    $('.free-shipping-bar-container').css({
     "display": 'block',
@@ -86,7 +87,6 @@ function setupFreeShippingBar(message) {
     "width": `${progressBarWidth}%`,
     "z-index": "1000000001",
     "position": "fixed",
-    "border": "0",
     "height": "4px",
     "background": "linear-gradient(90deg, rgba(30,69,171,1) 0%, rgba(81,18,135,1) 34%, rgba(142,19,96,1) 69%, rgba(144,7,18,1) 100%)",
    });
