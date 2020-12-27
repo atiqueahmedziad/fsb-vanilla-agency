@@ -125,6 +125,7 @@ const init = async () => {
   initialMsgAfter = messages.initialMsgAfter;
   progressMsgBefore = messages.progressMsgBefore;
   progressMsgAfter = messages.progressMsgAfter;
+  goalAchievedMsg = messages.goalAchievedMsg;
   bgColor = styles.bgColor;
   txtColor = styles.txtColor;
 
