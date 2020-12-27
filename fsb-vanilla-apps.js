@@ -28,7 +28,8 @@ function getBarMessage(goalAmount, cartAmount) {
 
 function updateFreeShippingBar(goalAmount, cartAmount) {
   const barMessage = getBarMessage(goalAmount, cartAmount);
-  progressBarWidth = `${cartAmount / goalAmount * 100}`;
+  const newBarWidth = cartAmount / goalAmount * 100;
+  progressBarWidth = `${newBarWidth > 100 ? 100 : newBarWidth}`;
 
   $('.fsb-progress-bar').css({
     "width": `${progressBarWidth}%`,
