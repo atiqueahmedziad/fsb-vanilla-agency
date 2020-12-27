@@ -43,7 +43,7 @@ function updateFreeShippingBar(goalAmount, cartAmount) {
 }
 
 function setupFreeShippingBar(message) {
-   $('header').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div></div><div class="fsb-progress-bar"></div>`);
+   $('body').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div></div><div class="fsb-progress-bar"></div>`);
 
    $('.free-shipping-bar-container').css({
     "display": 'block',
