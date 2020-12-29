@@ -7,6 +7,7 @@ let progressMsgBefore = "";
 let progressMsgAfter = "";
 let goalAchievedMsg = "";
 let progressBarWidth = "0";
+let globalSettings = {};
 
 function valWithDecimal(val) {
   const valStr = val.toString();
@@ -27,15 +28,16 @@ function getBarMessage(goalAmount, cartAmount) {
 }
 
 function updateProgressBar(goalAmount, cartAmount) {
+  if(!globalSettings.pgBarEnabled) {
+    return;
+  }
+
   const newBarWidth = cartAmount / goalAmount * 100;
   progressBarWidth = `${newBarWidth > 100 ? 100 : newBarWidth}`;
   const progressBarEle = document.querySelector('.fsb-progress-bar');
 
   if(progressBarEle) {
     progressBarEle.style.width = `${progressBarWidth}%`;
-    // $('.fsb-progress-bar').css({
-    //   "width": `${progressBarWidth}%`,
-    // });
   } else {
     setupProgressBar(progressBarWidth);
   }
@@ -60,6 +62,10 @@ function setupProgressBar(progressBarWidth) {
 }
 
 function updateFreeShippingBar(goalAmount, cartAmount) {
+  if(!globalSettings.shpBarEnabled) {
+    return;
+  }
+
   const barMessage = getBarMessage(goalAmount, cartAmount);
   const freeShippingBarEle = document.querySelector('.free-shipping-bar');
   if(freeShippingBarEle) {
@@ -114,45 +120,7 @@ function setupFreeShippingBar(message) {
 
   document.body.insertBefore(barContainer, document.body.childNodes[0]);
 
-  // $('body').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div></div>`);
-
-  //  $('.free-shipping-bar-container').css({
-  //   "display": 'block',
-  //   "color": 'inherit',
-  //   "height": '44px'
-  //  });
-
-  //  $('.free-shipping-bar').css({
-  //   "opacity": "1",
-  //   "margin": "0px",
-  //   "padding": "0px",
-  //   "left": "0px",
-  //   "height": "auto",
-  //   "width": "100%",
-  //   "z-index": "100000001",
-  //   "position": "fixed",
-  //   "top": "0px",
-  //  });
-
-  //  $('.free-shipping-bar .text-container').css({
-  //   "text-align": "center",
-  //   "margin": "0px",
-  //   "margin-bottom": "0px",
-  //   "padding": "12px 10px",
-  //   "left": "0px",
-  //   "height": "auto",
-  //   "width": "100%",
-  //   "box-sizing": "border-box",
-  //   "border": "medium none",
-  //   "background-color": `${bgColor}`,
-  //   "color": `${txtColor}`,
-  //   "font-size": "16px",
-  //   "line-height": "20px",
-  //   "font-family": "Helvetica",
-  //  });
-
   document.querySelector('.sticky').style.top = "44px";
-  //$(".sticky").css("top", "44px");
 }
 
 async function getTotalCartValue() {
@@ -179,6 +147,8 @@ const init = async () => {
 
   const data = await dataBody.json();
   const { messages, styles, settings } = data;
+
+  globalSettings = settings;
 
   if(!settings.shpBarEnabled && !settings.pgBarEnabled) {
     return;
