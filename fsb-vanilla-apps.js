@@ -138,6 +138,10 @@ const init = async () => {
   const totalCartAmount = await getTotalCartValue();
   goalAmount = data.goalAmount;
 
+  if(settings.pgBarEnabled) {
+    updateProgressBar(goalAmount, totalCartAmount)
+  }
+
   if(settings.shpBarEnabled) {
     initialMsgBefore = messages.initialMsgBefore;
     initialMsgAfter = messages.initialMsgAfter;
@@ -148,10 +152,6 @@ const init = async () => {
     txtColor = styles.txtColor;
 
     updateFreeShippingBar(goalAmount, totalCartAmount);
-  }
-
-  if(settings.pgBarEnabled) {
-    updateProgressBar(goalAmount, totalCartAmount)
   }
 }
 
