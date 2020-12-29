@@ -29,11 +29,13 @@ function getBarMessage(goalAmount, cartAmount) {
 function updateProgressBar(goalAmount, cartAmount) {
   const newBarWidth = cartAmount / goalAmount * 100;
   progressBarWidth = `${newBarWidth > 100 ? 100 : newBarWidth}`;
+  const progressBarEle = document.querySelector('.fsb-progress-bar');
 
-  if($('.fsb-progress-bar').length) {
-    $('.fsb-progress-bar').css({
-      "width": `${progressBarWidth}%`,
-    });
+  if(progressBarEle) {
+    progressBarEle.style.width = `${progressBarWidth}%`;
+    // $('.fsb-progress-bar').css({
+    //   "width": `${progressBarWidth}%`,
+    // });
   } else {
     setupProgressBar(progressBarWidth);
   }
@@ -71,6 +73,8 @@ function setupFreeShippingBar(message) {
   const barContainer = document.createElement('div');
   const freeShippingBar = document.createElement('div');
   const textContainer = document.createElement('div');
+
+  freeShippingBar.classList.add('free-shipping-bar');
 
   const barContainerStyle = barContainer.style;
   barContainerStyle.display = "block";
