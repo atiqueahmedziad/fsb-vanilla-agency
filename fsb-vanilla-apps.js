@@ -181,7 +181,4 @@ async function calculateShipping(cartJson) {
    updateFreeShippingBar(goalAmount, currCartAmount);
 }
 
-
-document.addEventListener('DOMContentLoaded', async () => {
-  init();
-});
+init();
