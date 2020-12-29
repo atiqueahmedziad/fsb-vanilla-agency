@@ -50,7 +50,7 @@ function setupProgressBar(progressBarWidth) {
   eleStyle.margin = "0px";
   eleStyle.padding = "0px";
   eleStyle.left = "0px";
-  eleStyle.width = `${progressBarWidth}`;
+  eleStyle.width = `${progressBarWidth}%`;
   eleStyle.zIndex = "1000000001";
   eleStyle.position = "fixed";
   eleStyle.height = "4px";
