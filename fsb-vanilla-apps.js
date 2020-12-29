@@ -179,6 +179,7 @@ window.XMLHttpRequest.prototype.open = openReplacement;
 async function calculateShipping(cartJson) {
    const currCartAmount = await getTotalCartValue();
    updateFreeShippingBar(goalAmount, currCartAmount);
+   updateProgressBar(goalAmount, currCartAmount);
 }
 
 init();
