@@ -26,14 +26,37 @@ function getBarMessage(goalAmount, cartAmount) {
   }
 }
 
-function updateFreeShippingBar(goalAmount, cartAmount) {
-  const barMessage = getBarMessage(goalAmount, cartAmount);
+function updateProgressBar(goalAmount, cartAmount) {
   const newBarWidth = cartAmount / goalAmount * 100;
   progressBarWidth = `${newBarWidth > 100 ? 100 : newBarWidth}`;
 
+  if($('.fsb-progress-bar').length) {
+    $('.fsb-progress-bar').css({
+      "width": `${progressBarWidth}%`,
+    });
+  } else {
+    setupProgressBar(progressBarWidth);
+  }
+}
+
+function setupProgressBar(progressBarWidth) {
+  $('body').prepend(`<div class="fsb-progress-bar"></div>`);
+
   $('.fsb-progress-bar').css({
+    "opacity": "1",
+    "margin": "0px",
+    "padding": "0px",
+    "left": "0px",
     "width": `${progressBarWidth}%`,
-  });
+    "z-index": "1000000001",
+    "position": "fixed",
+    "height": "4px",
+    "background": "linear-gradient(90deg, rgba(30,69,171,1) 0%, rgba(81,18,135,1) 34%, rgba(142,19,96,1) 69%, rgba(144,7,18,1) 100%)",
+   });
+}
+
+function updateFreeShippingBar(goalAmount, cartAmount) {
+  const barMessage = getBarMessage(goalAmount, cartAmount);
 
   if($('.free-shipping-bar').length) {
     $('.free-shipping-bar .text-container').text(barMessage);
@@ -43,7 +66,7 @@ function updateFreeShippingBar(goalAmount, cartAmount) {
 }
 
 function setupFreeShippingBar(message) {
-   $('body').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div></div><div class="fsb-progress-bar"></div>`);
+   $('body').prepend(`<div class="free-shipping-bar-container"><div class="free-shipping-bar"><div class="text-container">${message}</div></div></div>`);
 
    $('.free-shipping-bar-container').css({
     "display": 'block',
@@ -80,18 +103,6 @@ function setupFreeShippingBar(message) {
     "font-family": "Helvetica",
    });
 
-   $('.fsb-progress-bar').css({
-    "opacity": "1",
-    "margin": "0px",
-    "padding": "0px",
-    "left": "0px",
-    "width": `${progressBarWidth}%`,
-    "z-index": "1000000001",
-    "position": "fixed",
-    "height": "4px",
-    "background": "linear-gradient(90deg, rgba(30,69,171,1) 0%, rgba(81,18,135,1) 34%, rgba(142,19,96,1) 69%, rgba(144,7,18,1) 100%)",
-   });
-
    $(".sticky").css("top", "44px");
 }
 
@@ -118,20 +129,30 @@ const init = async () => {
   });
 
   const data = await dataBody.json();
-  goalAmount = data.goalAmount;
+  const { messages, styles, settings } = data;
 
-  const { messages, styles } = data;
-
-  initialMsgBefore = messages.initialMsgBefore;
-  initialMsgAfter = messages.initialMsgAfter;
-  progressMsgBefore = messages.progressMsgBefore;
-  progressMsgAfter = messages.progressMsgAfter;
-  goalAchievedMsg = messages.goalAchievedMsg;
-  bgColor = styles.bgColor;
-  txtColor = styles.txtColor;
+  if(!settings.shpBarEnabled && !settings.pgBarEnabled) {
+    return;
+  }
 
   const totalCartAmount = await getTotalCartValue();
-  updateFreeShippingBar(goalAmount, totalCartAmount);
+  goalAmount = data.goalAmount;
+
+  if(settings.shpBarEnabled) {
+    initialMsgBefore = messages.initialMsgBefore;
+    initialMsgAfter = messages.initialMsgAfter;
+    progressMsgBefore = messages.progressMsgBefore;
+    progressMsgAfter = messages.progressMsgAfter;
+    goalAchievedMsg = messages.goalAchievedMsg;
+    bgColor = styles.bgColor;
+    txtColor = styles.txtColor;
+
+    updateFreeShippingBar(goalAmount, totalCartAmount);
+  }
+
+  if(settings.pgBarEnabled) {
+    updateProgressBar(goalAmount, totalCartAmount)
+  }
 }
 
 const open = window.XMLHttpRequest.prototype.open;
@@ -160,4 +181,7 @@ async function calculateShipping(cartJson) {
    updateFreeShippingBar(goalAmount, currCartAmount);
 }
 
-init();
+
+document.addEventListener('DOMContentLoaded', async () => {
+  init();
+});
