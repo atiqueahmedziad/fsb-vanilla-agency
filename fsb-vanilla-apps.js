@@ -137,9 +137,12 @@ function setupFreeShippingBar(message) {
 async function getTotalCartValue() {
   const cartResponse = await fetch(`${window.location.origin}/cart.js`);
   if (cartResponse.ok) {
-    // set current currency symbol
-    currentCurrency = currencyList[cartResponse.currency];
     const cartObj = await cartResponse.json();
+    // set current currency symbol
+    console.log(cartObj);
+    console.log(cartObj.currency);
+    console.log(currencyList[cartObj.currency]);
+    currentCurrency = currencyList[cartObj.currency];
     const totalCartValue = valWithDecimal(cartObj.original_total_price);
     return totalCartValue;
   } else {
