@@ -139,9 +139,6 @@ async function getTotalCartValue() {
   if (cartResponse.ok) {
     const cartObj = await cartResponse.json();
     // set current currency symbol
-    console.log(cartObj);
-    console.log(cartObj.currency);
-    console.log(currencyList[cartObj.currency]);
     currentCurrency = currencyList[cartObj.currency];
     const totalCartValue = valWithDecimal(cartObj.original_total_price);
     return totalCartValue;
