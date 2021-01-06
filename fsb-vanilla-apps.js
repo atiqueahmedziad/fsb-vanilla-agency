@@ -11,8 +11,8 @@ let globalSettings = {};
 let currentCurrency = '';
 
 const currencyList = {
-  GBP: '$',
-  USD: '£',
+  USD: '$',
+  GBP: '£',
 };
 
 function valWithDecimal(val) {
