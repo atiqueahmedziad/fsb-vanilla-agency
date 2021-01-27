@@ -273,7 +273,7 @@ const init = async () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        shopId: `${window.location.host}`,
+        shopId: `${Shopify.shop}`,
       }),
     }
   );
