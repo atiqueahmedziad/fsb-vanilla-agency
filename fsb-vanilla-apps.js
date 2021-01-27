@@ -252,7 +252,7 @@ function setupFreeShippingBar(message) {
 }
 
 async function getTotalCartValue() {
-  const cartResponse = await fetch(`${window.location.origin}/cart.js`);
+  const cartResponse = await fetch(`${Shopify.shop}/cart.js`);
   if (cartResponse.ok) {
     const cartObj = await cartResponse.json();
     // set current currency symbol
